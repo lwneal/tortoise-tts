@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text-to-Speech</title>
+</head>
+<body>
+    <h1>Text-to-Speech</h1>
+    <form action="/" method="post">
+        <label for="text">Text:</label>
+        <input type="text" name="text" id="text" required>
+        <br>
+	<label for="voice">Voice:</label>
+        <select name="voice" id="voice" required>
+            {% for voice in os.listdir('tortoise/voices') %}
+                <option value="{{ voice }}">{{ voice }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="preset">Quality Preset:</label>
+        <select name="preset" id="preset" required>
+            <option value="ultra_fast">Ultra Fast</option>
+            <option value="fast" selected>Fast</option>
+            <option value="standard">Standard</option>
+            <option value="high_quality">High Quality</option>
+        </select>
+	<br>
+        <button type="submit">Generate</button>
+    </form>
+    <h2>Generated Files</h2>
+    <ul>
+        {% for file in os.listdir('results') %}
+            <li>
+                <a href="{{ url_for('get_result', filename=file) }}" download>{{ file }}</a>
+                <audio controls>
+                    <source src="{{ url_for('get_result', filename=file) }}" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
